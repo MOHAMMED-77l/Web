@@ -13,21 +13,23 @@
             text-align: center;
         }
         
-        /* Style 2: لون أخضر، معلومات عريضة على اليسار */
+        /* Style 2: لون أخضر، معلومات عريضة على اليسار (مُعدل للعنوان) */
         .style2 {
             color: green;
-            font-size: 16px;
+            font-size: 20px; /* تم تكبير حجم الخط */
             font-weight: bold;
             font-family: 'Cambria', serif;
             text-align: left;
-            margin: 15px 0; /* زيادة المسافة العمودية هنا */
+            margin: 20px 0 5px 0; /* مسافات محسنة */
         }
         
-        /* Style 3: حجم الخط 14px، لون أسود للمعلومات */
+        /* Style 3: حجم الخط 16px، لون أسود للمعلومات (تم تكبيره قليلاً) */
         .style3 {
-            font-size: 14px;
+            font-size: 16px; 
             color: black;
             font-weight: normal; 
+            display: block; /* لجعل المعلومات تحت العنوان */
+            margin-top: 5px;
         }
         
         /* Style 4: صورة على اليمين */
@@ -56,10 +58,10 @@
         
         <h2 class="style1">Web Development (Lab1)</h2>
         
-        <p class="style2">Full name: <span class="style3">HOMCI MOHAMMED</span></p>
-        <p class="style2">Age: <span class="style3">20 years old</span></p>
-        <p class="style2">Class: <span class="style3">2nd LMD computer Science</span></p>
-        <p class="style2">University: <span class="style3">University of EL OUED</span></p>
+        <h3 class="style2">Full name: <span class="style3">HOMCI MOHAMMED</span></h3>
+        <h3 class="style2">Age: <span class="style3">20 years old</span></h3>
+        <h3 class="style2">Class: <span class="style3">2nd LMD computer Science</span></h3>
+        <h3 class="style2">University: <span class="style3">University of EL OUED</span></h3>
     </div>
          
 </body>
