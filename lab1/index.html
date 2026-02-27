@@ -44,32 +44,29 @@
          alt="University Logo" class="style4">
          
 </body>
-</html>
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>حاسبة المعدل التراكمي (JS)</title>
+    <title>حاسبة المعدل التراكمي (jQuery)</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* كود CSS للتنسيق - مطابق لمتطلبات المعمل  */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .container { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1, h2 { text-align: center; color: #24292e; }
-        .course-entry { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        input, select { padding: 10px; flex: 1; border: 1px solid #ddd; border-radius: 5px; }
-        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-size: 16px; margin-top: 10px; }
+        /* التنسيقات (CSS) كما هي */
+        body { font-family: sans-serif; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .course-entry { display: flex; gap: 10px; margin-bottom: 10px; }
+        input, select { padding: 8px; flex: 1; }
+        button { padding: 10px; cursor: pointer; border: none; border-radius: 5px; }
         .btn-add { background-color: #4078c0; color: white; }
         .btn-submit { background-color: #2c3e50; color: white; width: 100%; }
-        button:hover { opacity: 0.9; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-        th { background-color: #f8f9fa; }
-        .result-box { background-color: #e8f0fe; padding: 20px; border-radius: 5px; margin-top: 20px; text-align: center; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        .result-box { background-color: #e8f0fe; padding: 15px; margin-top: 20px; text-align: center; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>حاسبة المعدل التراكمي (JS)</h1>
+        <h1>حاسبة المعدل التراكمي (jQuery)</h1>
 
         <form id="gpaForm">
             <div id="courses">
@@ -85,7 +82,7 @@
                     </select>
                 </div>
             </div>
-            <button type="button" class="btn-add" onclick="addCourseField()">إضافة مادة</button>
+            <button type="button" class="btn-add" id="addCourseBtn">إضافة مادة</button>
             <button type="submit" class="btn-submit">احسب المعدل</button>
         </form>
 
@@ -93,67 +90,49 @@
     </div>
 
     <script>
-        // كود JavaScript للحساب
-        function addCourseField() {
-            const container = document.getElementById('courses');
-            const newEntry = document.querySelector('.course-entry').cloneNode(true);
-            newEntry.querySelectorAll('input').forEach(input => input.value = '');
-            container.appendChild(newEntry);
-        }
+        // استخدام jQuery للتحكم بالصفحة والحساب
+        $(document).ready(function() {
+            // إضافة مادة جديدة باستخدام jQuery
+            $('#addCourseBtn').click(function() {
+                var newCourse = $('.course-entry:first').clone();
+                newCourse.find('input').val(''); // مسح القيم في المادة الجديدة
+                $('#courses').append(newCourse);
+            });
 
-        document.getElementById('gpaForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // منع إعادة تحميل الصفحة
+            // حساب المعدل عند إرسال النموذج باستخدام jQuery
+            $('#gpaForm').submit(function(e) {
+                e.preventDefault(); // منع إعادة تحميل الصفحة
 
-            const courseNames = document.getElementsByName('course_name[]');
-            const credits = document.getElementsByName('credits[]');
-            const grades = document.getElementsByName('grade[]');
+                var totalPoints = 0;
+                var totalCredits = 0;
+                var tableHtml = "<table><tr><th>المادة</th><th>الساعات</th><th>الدرجة</th></tr>";
 
-            let totalPoints = 0;
-            let totalCredits = 0;
-            let tableHtml = "<table><tr><th>المادة</th><th>الساعات</th><th>الدرجة</th></tr>";
+                // المرور على كل مادة باستخدام jQuery
+                $('.course-entry').each(function() {
+                    var credits = parseFloat($(this).find('input[name="credits[]"]').val());
+                    var grade = parseFloat($(this).find('select[name="grade[]"]').val());
+                    var courseName = $(this).find('input[name="course_name[]"]').val();
 
-            for (let i = 0; i < courseNames.length; i++) {
-                const creditVal = parseFloat(credits[i].value);
-                const gradeVal = parseFloat(grades[i].value);
+                    totalPoints += (credits * grade);
+                    totalCredits += credits;
+                    
+                    tableHtml += "<tr><td>" + courseName + "</td><td>" + credits + "</td><td>" + $(this).find('select[name="grade[]"] option:selected').text() + "</td></tr>";
+                });
+                tableHtml += "</table>";
 
-                totalPoints += (creditVal * gradeVal);
-                totalCredits += creditVal;
+                if (totalCredits > 0) {
+                    var gpa = totalPoints / totalCredits;
+                    var interpretation = "";
+                    
+                    // التفسير كما في المعمل
+                    if (gpa >= 3.7) interpretation = "امتياز (Distinction)";
+                    else if (gpa >= 3.0) interpretation = "جيد جداً (Merit)";
+                    else if (gpa >= 2.0) interpretation = "جيد (Pass)";
+                    else interpretation = "راسب (Fail)";
 
-                // تحويل النقاط إلى درجة حرفية للعرض 
-                let letterGrade = "";
-                switch(gradeVal){
-                    case 4.0: letterGrade = "A/A+"; break;
-                    case 3.0: letterGrade = "B"; break;
-                    case 2.0: letterGrade = "C"; break;
-                    case 1.0: letterGrade = "D"; break;
-                    case 0.0: letterGrade = "F"; break;
+                    $('#resultArea').html("<div class='result-box'><h2>المعدل: " + gpa.toFixed(2) + "</h2><h3>التقدير: " + interpretation + "</h3></div>" + tableHtml);
                 }
-                
-                tableHtml += `<tr><td>${courseNames[i].value}</td><td>${creditVal}</td><td>${letterGrade}</td></tr>`;
-            }
-            tableHtml += "</table>";
-
-            // حساب المعدل النهائي وتفسيره 
-            if (totalCredits > 0) {
-                const gpa = totalPoints / totalCredits;
-                let interpretation = "";
-                
-                if (gpa >= 3.7) interpretation = "امتياز (Distinction)";
-                else if (gpa >= 3.0) interpretation = "جيد جداً (Merit)";
-                else if (gpa >= 2.0) interpretation = "جيد (Pass)";
-                else interpretation = "راسب (Fail)";
-
-                const resultArea = document.getElementById('resultArea');
-                resultArea.innerHTML = `
-                    <div class='result-box'>
-                        <h2>النتيجة النهائية</h2>
-                        <h3>معدلك التراكمي هو: ${gpa.toFixed(2)}</h3>
-                        <h3>التقدير: ${interpretation}</h3>
-                    </div>
-                    ${tableHtml}
-                    <button type="button" class="btn-submit" style="background-color: #6e5494;" onclick="location.reload()">حساب جديد</button>
-                `;
-            }
+            });
         });
     </script>
 </body>
