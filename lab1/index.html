@@ -6,42 +6,57 @@
     <style>
         /* تعريف الأنماط المطلوبة (Styles) */
         
-        /* Style 2: لون أخضر، حجم الخط 16px، عريض، نوع الخط 'Cambria' */
+        /* Style 1: استخدام اللون الأحمر */
+        .style1 {
+            color: red;
+        }
+        
+        /* Style 2: لون أخضر (تم تغييره للأحمر حسب الطلب)، حجم الخط 16px، عريض، نوع الخط 'Cambria' */
         .style2 {
-            color: green;
+            color: red;                /* تم تغييره للأحمر */
             font-size: 16px;
             font-weight: bold;
             font-family: 'Cambria', serif;
-            text-align: left; /* محاذاة النص لليسار */
         }
         
         /* Style 3: حجم الخط 14px، لون أسود للنصوص */
         .style3 {
             font-size: 14px;
             color: black;
-            font-weight: normal; /* لإلغاء العريض عن المعلومات */
+            font-weight: normal; 
         }
         
         /* Style 4: إضافة صورة بحجم 250x250 بكسل */
         .style4 {
             width: 250px;
             height: 250px;
+            float: left;        /* وضع الصورة على اليسار */
+            margin-right: 20px; /* مسافة بين الصورة والنص */
+        }
+        
+        /* لتنظيم العناصر بعد الصورة */
+        .content-wrapper {
+            overflow: hidden;
         }
     </style>
 </head>
 <body style="text-align: left; direction: ltr;">
     
-    <h1 style="text-align: left;">Welcome to my Web Site</h1>
+    <h1 style="color: black; text-align: left;">Welcome to my Web Site</h1>
     
-    <h2 class="style2">Web Development (Lab1)</h2>
-    
-    <p class="style2">Full name: <span class="style3">HOMCI MOHAMMED</span></p>
-    <p class="style2">Age: <span class="style3">20 years old</span></p>
-    <p class="style2">Class: <span class="style3">2nd LMD computer Science</span></p>
-    <p class="style2">University: <span class="style3">University of EL OUED</span></p>
-    
-    <img src="https://th.bing.com/th/id/OIP.nMYswYBIQhFS8f-kuw9pywHaHa?w=165&h=180&c=7&r=0&o=7&pid=1.7&rm=3" 
-         alt="University Logo" class="style4">
+    <div class="content-wrapper">
+        <img src="https://th.bing.com/th/id/OIP.nMYswYBIQhFS8f-kuw9pywHaHa?w=165&h=180&c=7&r=0&o=7&pid=1.7&rm=3" 
+             alt="University Logo" class="style4">
+        
+        <div>
+            <h2 class="style1">Web Development (Lab1)</h2>
+            
+            <p class="style2">Full name: <span class="style3">HOMCI MOHAMMED</span></p>
+            <p class="style2">Age: <span class="style3">20 years old</span></p>
+            <p class="style2">Class: <span class="style3">2nd LMD computer Science</span></p>
+            <p class="style2">University: <span class="style3">University of EL OUED</span></p>
+        </div>
+    </div>
          
 </body>
 </html>
