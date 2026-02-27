@@ -45,3 +45,116 @@
          
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حاسبة المعدل التراكمي (JS)</title>
+    <style>
+        /* كود CSS للتنسيق - مطابق لمتطلبات المعمل  */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; }
+        .container { max-width: 650px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2 { text-align: center; color: #24292e; }
+        .course-entry { display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        input, select { padding: 10px; flex: 1; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; font-size: 16px; margin-top: 10px; }
+        .btn-add { background-color: #4078c0; color: white; }
+        .btn-submit { background-color: #2c3e50; color: white; width: 100%; }
+        button:hover { opacity: 0.9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #f8f9fa; }
+        .result-box { background-color: #e8f0fe; padding: 20px; border-radius: 5px; margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حاسبة المعدل التراكمي (JS)</h1>
+
+        <form id="gpaForm">
+            <div id="courses">
+                <div class="course-entry">
+                    <input type="text" name="course_name[]" placeholder="اسم المادة" required>
+                    <input type="number" name="credits[]" placeholder="الساعات" min="1" required>
+                    <select name="grade[]" required>
+                        <option value="4.0">A/A+</option>
+                        <option value="3.0">B</option>
+                        <option value="2.0">C</option>
+                        <option value="1.0">D</option>
+                        <option value="0.0">F</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" class="btn-add" onclick="addCourseField()">إضافة مادة</button>
+            <button type="submit" class="btn-submit">احسب المعدل</button>
+        </form>
+
+        <div id="resultArea"></div>
+    </div>
+
+    <script>
+        // كود JavaScript للحساب
+        function addCourseField() {
+            const container = document.getElementById('courses');
+            const newEntry = document.querySelector('.course-entry').cloneNode(true);
+            newEntry.querySelectorAll('input').forEach(input => input.value = '');
+            container.appendChild(newEntry);
+        }
+
+        document.getElementById('gpaForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+
+            const courseNames = document.getElementsByName('course_name[]');
+            const credits = document.getElementsByName('credits[]');
+            const grades = document.getElementsByName('grade[]');
+
+            let totalPoints = 0;
+            let totalCredits = 0;
+            let tableHtml = "<table><tr><th>المادة</th><th>الساعات</th><th>الدرجة</th></tr>";
+
+            for (let i = 0; i < courseNames.length; i++) {
+                const creditVal = parseFloat(credits[i].value);
+                const gradeVal = parseFloat(grades[i].value);
+
+                totalPoints += (creditVal * gradeVal);
+                totalCredits += creditVal;
+
+                // تحويل النقاط إلى درجة حرفية للعرض 
+                let letterGrade = "";
+                switch(gradeVal){
+                    case 4.0: letterGrade = "A/A+"; break;
+                    case 3.0: letterGrade = "B"; break;
+                    case 2.0: letterGrade = "C"; break;
+                    case 1.0: letterGrade = "D"; break;
+                    case 0.0: letterGrade = "F"; break;
+                }
+                
+                tableHtml += `<tr><td>${courseNames[i].value}</td><td>${creditVal}</td><td>${letterGrade}</td></tr>`;
+            }
+            tableHtml += "</table>";
+
+            // حساب المعدل النهائي وتفسيره 
+            if (totalCredits > 0) {
+                const gpa = totalPoints / totalCredits;
+                let interpretation = "";
+                
+                if (gpa >= 3.7) interpretation = "امتياز (Distinction)";
+                else if (gpa >= 3.0) interpretation = "جيد جداً (Merit)";
+                else if (gpa >= 2.0) interpretation = "جيد (Pass)";
+                else interpretation = "راسب (Fail)";
+
+                const resultArea = document.getElementById('resultArea');
+                resultArea.innerHTML = `
+                    <div class='result-box'>
+                        <h2>النتيجة النهائية</h2>
+                        <h3>معدلك التراكمي هو: ${gpa.toFixed(2)}</h3>
+                        <h3>التقدير: ${interpretation}</h3>
+                    </div>
+                    ${tableHtml}
+                    <button type="button" class="btn-submit" style="background-color: #6e5494;" onclick="location.reload()">حساب جديد</button>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
